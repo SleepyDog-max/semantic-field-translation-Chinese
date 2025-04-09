@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semantic Field in Translation - Quiz</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #0077cc;
+    }
+    .question {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-left: 5px solid #0077cc;
+      background: #f9f9f9;
+      border-radius: 6px;
+    }
+    .options label {
+      display: block;
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+    button {
+      background: #0077cc;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+    .navigation {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .summary {
+      margin-top: 2rem;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Semantic Field in Translation</h1>
+    <div id="quiz"></div>
+    <div class="navigation">
+      <button id="prev">Previous</button>
+      <button id="next">Next</button>
+      <button id="restart">Restart</button>
+    </div>
+    <div id="summary" class="summary"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        q: "1. English word: 'Uncle' — Choose the best translation depending on context:",
+        options: ["叔叔", "舅舅", "伯伯", "All of the above"],
+        answer: 3,
+        explanation: "In English, 'uncle' is a general term used for the brothers of either parent. In Chinese, however, each uncle is labeled according to the side of the family and birth order: 伯伯 (father's older brother), 叔叔 (father's younger brother), 舅舅 (mother's brother). This reflects a more detailed semantic field in Chinese kinship terms."
+      },
+      {
+        q: "2. How does '茶' present challenges in translation to English?",
+        options: ["Always means green tea", "Multiple specific English terms exist", "English and Chinese treat tea identically", "Only refers to black tea in Chinese"],
+        answer: 1,
+        explanation: "In Chinese, '茶' can refer to green tea, black tea, oolong tea, and herbal infusions like 菊花茶 (chrysanthemum tea). In English, however, only drinks derived from the Camellia sinensis plant are considered 'tea.' Other infusions are called 'herbal tea' or 'tisane.' These semantic differences create potential mistranslations."
+      },
+      {
+        q: "3. Explain the non-equivalence: 'Cousin' vs. Chinese equivalents.",
+        options: ["One word for all cousins", "Distinguished by gender and lineage in Chinese", "Identical usage", "'Cousin' doesn't exist in Chinese"],
+        answer: 1,
+        explanation: "English uses a single term 'cousin' for any child of one's aunt or uncle. In Chinese, cousins are identified based on maternal/paternal lineage and gender, e.g., 表哥 (older male cousin on mother's side), 堂妹 (younger female cousin on father's side). This shows a richer semantic categorization in Chinese."
+      },
+      {
+        q: "4. Which English word is divided more finely in Chinese?",
+        options: ["Snow", "Rice", "Car", "Rain"],
+        answer: 1,
+        explanation: "In English, 'rice' is used for both the cooked and uncooked grain. Chinese distinguishes among 米 (uncooked grain), 饭 (cooked rice), and 稻 (rice plant). This shows how a single English word may map onto several terms in Chinese due to a more finely divided semantic field."
+      },
+      {
+        q: "5. English 'see', 'look', 'watch' vs. Chinese 看:",
+        options: ["Completely different in Chinese", "Chinese uses one verb 看", "No visual verbs in Chinese", "They are interchangeable in English"],
+        answer: 1,
+        explanation: "English distinguishes between passive seeing ('see'), active viewing ('look'), and prolonged viewing ('watch'). Chinese often uses 看 for all three, showing how a broader semantic field in Chinese compresses distinctions made in English."
+      },
+      {
+        q: "6. How do 'bread' (English) and 面包 (Chinese) differ?",
+        options: ["English lacks steamed buns", "Bread includes mantou", "面包 excludes 馒头", "Bread only means toast"],
+        answer: 2,
+        explanation: "In Chinese, 面包 specifically refers to baked Western-style bread, while 馒头 refers to steamed bread, which many English speakers might also think of as 'bread.' This creates a mismatch in the semantic field of staple foods."
+      },
+      {
+        q: "7. Best translation for: 他在村里当干部。",
+        options: ["Civil servant", "Government official", "Village leader", "Cadre in the village"],
+        answer: 2,
+        explanation: "The term '干部' (cadre) is used broadly in Chinese for people in positions of authority, but in English, 'cadre' is uncommon and may confuse readers. 'Village leader' conveys the meaning clearly and naturally."
+      },
+      {
+        q: "8. Color term difference between Chinese and English:",
+        options: ["红色 = crimson + maroon", "蓝色 includes light/dark blue", "No word for green in Chinese", "Identical treatment"],
+        answer: 1,
+        explanation: "In Chinese, 蓝色 often covers both light and dark blue shades, whereas English makes finer distinctions (e.g., sky blue vs. navy blue). This semantic compression in Chinese can lead to misinterpretation if not handled carefully in translation."
+      },
+      {
+        q: "9. Best English equivalent of 修养:",
+        options: ["Well-mannered", "Cultured", "Well-educated", "Disciplined"],
+        answer: 1,
+        explanation: "修养 includes manners, education, inner cultivation, and moral refinement. 'Cultured' best reflects this blend of attributes, while the other choices capture only parts of the meaning.
+
+In English, 'cultured' refers to someone who is refined, appreciates the arts and literature, and demonstrates broad cultural knowledge. It’s the closest match to 修养 in terms of semantic scope.
+
+- 'Well-mannered' refers mainly to politeness and etiquette.
+- 'Well-educated' focuses on formal schooling or academic achievement.
+- 'Disciplined' describes self-control or obedience, not cultural refinement.
+
+Therefore, in most translation contexts, 'cultured' conveys the richer and broader meaning of 修养 more accurately."
+      },
+      {
+        q: "10. Why is 青 hard to translate?",
+        options: ["Refers to blue/green mix", "Means only blue", "Means only green", "It’s not used anymore"],
+        answer: 0,
+        explanation: "The Chinese term 青 is a traditional color category encompassing various shades between blue and green. English lacks a single equivalent, forcing translators to choose based on context."
+      }
+    ];
+
+    let currentIndex = 0;
+    const quizDiv = document.getElementById("quiz");
+    const summaryDiv = document.getElementById("summary");
+
+    function renderQuestion(index) {
+      const q = quizData[index];
+      quizDiv.innerHTML = `
+        <div class="question">
+          <p>${q.q}</p>
+          <div class="options">
+            ${q.options.map((opt, i) => `
+              <label><input type="radio" name="q${index}" value="${i}" /> ${opt}</label>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function showSummary() {
+      let score = 0;
+      summaryDiv.innerHTML = '<h2>Quiz Summary</h2>';
+      quizData.forEach((item, i) => {
+        const selected = document.querySelector(`input[name='q${i}']:checked`);
+        const isCorrect = selected && parseInt(selected.value) === item.answer;
+        if (isCorrect) score++;
+        summaryDiv.innerHTML += `
+          <p><strong>Question ${i + 1}</strong>: ${item.q}<br>
+          Your answer: ${selected ? item.options[selected.value] : '<em>No answer</em>'}<br>
+          <span class='${isCorrect ? "correct" : "incorrect"}'>${isCorrect ? "Correct" : "Incorrect"}</span><br>
+          <em>Explanation:</em> ${item.explanation}</p>
+          <hr>
+        `;
+      });
+      summaryDiv.innerHTML = `<h2>Your Score: ${score}/${quizData.length}</h2>` + summaryDiv.innerHTML;
+    }
+
+    document.getElementById("next").addEventListener("click", () => {
+      if (currentIndex < quizData.length - 1) {
+        currentIndex++;
+        renderQuestion(currentIndex);
+      } else {
+        quizDiv.innerHTML = "";
+        showSummary();
+      }
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion(currentIndex);
+      }
+    });
+
+    document.getElementById("restart").addEventListener("click", () => {
+      currentIndex = 0;
+      summaryDiv.innerHTML = "";
+      renderQuestion(currentIndex);
+    });
+
+    renderQuestion(currentIndex);
+  </script>
+</body>
+</html>
