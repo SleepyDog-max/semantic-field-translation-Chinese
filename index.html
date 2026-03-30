@@ -1,308 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Semantic Fields in Translation Quiz</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            transition: background-color 0.5s;
-        }
-        .quiz-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 600px;
-            text-align: center;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        h2 {
-            color: #34495e;
-            margin-bottom: 20px;
-        }
-        .question {
-            display: none;
-        }
-        .question.active {
-            display: block;
-        }
-        .options label {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .options label:hover {
-            background-color: #dcdcdc;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        textarea {
-            width: 80%;
-            height: 100px;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #bdc3c7;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #3498db;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        button:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        .summary {
-            text-align: left;
-        }
-        .summary h3 {
-            color: #e74c3c;
-        }
-        .summary p {
-            margin: 5px 0;
-        }
-        .correct {
-            color: #27ae60;
-        }
-        .incorrect {
-            color: #e74c3c;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semantic Fields in Translation Quiz</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px 12px;
+      transition: background-color 0.5s;
+    }
+
+    .quiz-container {
+      background-color: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #34495e;
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .question {
+      display: none;
+      text-align: left;
+    }
+
+    .question.active {
+      display: block;
+    }
+
+    .options label {
+      display: block;
+      margin: 10px 0;
+      padding: 12px;
+      background-color: #ecf0f1;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      line-height: 1.5;
+    }
+
+    .options label:hover {
+      background-color: #dcdcdc;
+      transform: translateY(-1px);
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #bdc3c7;
+      font-size: 1rem;
+      font-family: Arial, sans-serif;
+      resize: vertical;
+    }
+
+    .buttons {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 0 8px;
+      border: none;
+      border-radius: 6px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 0.95rem;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    button:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .summary {
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    .summary h3 {
+      color: #e74c3c;
+      margin-top: 0;
+    }
+
+    .summary-item {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .summary p {
+      margin: 6px 0;
+      line-height: 1.5;
+    }
+
+    .correct {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .incorrect {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .score {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    @media (max-width: 640px) {
+      .quiz-container {
+        padding: 18px;
+      }
+
+      button {
+        margin: 6px 4px;
+        width: calc(50% - 12px);
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="quiz-container">
-        <h1>Semantic Fields in Translation Quiz</h1>
-        <div id="questions">
-            <!-- Question 1 -->
-            <div class="question" data-answer="D" data-explanation="English uses one general term, 'uncle,' while Chinese distinguishes based on maternal/paternal side and seniority, showing a finer semantic field.">
-                <h2>1. English word: Uncle<br>Choose the best translation depending on context:</h2>
-                <div class="options">
-                    <label><input type="radio" name="q1" value="A"> A) 叔叔</label>
-                    <label><input type="radio" name="q1" value="B"> B) 舅舅</label>
-                    <label><input type="radio" name="q1" value="C"> C) 伯伯</label>
-                    <label><input type="radio" name="q1" value="D"> D) All of the above</label>
-                </div>
-            </div>
-            <!-- Question 2 -->
-            <div class="question" data-answer="B" data-explanation="In English, only drinks made from Camellia sinensis are strictly 'tea,' whereas Chinese '茶' includes herbal drinks like 菊花茶 or 枸杞茶. The mismatch in categorization shows a semantic field difference.">
-                <h2>2. The Chinese word “茶” refers to a wide range of beverages. Which illustrates challenges translating “茶” into English?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q2" value="A"> A) “茶” always means “green tea” in English.</label>
-                    <label><input type="radio" name="q2" value="B"> B) English uses different terms like “tea,” “herbal tea,” “infusion,” and “tisane.”</label>
-                    <label><input type="radio" name="q2" value="C"> C) English and Chinese treat all kinds of tea identically.</label>
-                    <label><input type="radio" name="q2" value="D"> D) “茶” only refers to black tea in Chinese.</label>
-                </div>
-            </div>
-            <!-- Question 3 (Short Answer) -->
-            <div class="question" data-answer="English uses one term for all cousins, but Chinese differentiates by gender and lineage—e.g., 表姐 (older female cousin, maternal) vs. 堂弟 (younger male cousin, paternal). This reflects a more detailed semantic field in Chinese." data-explanation="English uses one term for all cousins, but Chinese differentiates by gender and lineage—e.g., 表姐 (older female cousin, maternal) vs. 堂弟 (younger male cousin, paternal). This reflects a more detailed semantic field in Chinese.">
-                <h2>3. Explain the non-equivalence: The English word “cousin” vs. Chinese equivalents.</h2>
-                <textarea name="q3" placeholder="Type your answer here..."></textarea>
-            </div>
-            <!-- Question 4 -->
-            <div class="question" data-answer="B" data-explanation="Chinese distinguishes types and forms of rice: 米 (uncooked), 饭 (cooked), 稻 (rice plant), etc. English generally uses just 'rice,' indicating a coarser semantic field.">
-                <h2>4. Which English word belongs to a semantic field divided more finely in Chinese?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q4" value="A"> A) Snow</label>
-                    <label><input type="radio" name="q4" value="B"> B) Rice</label>
-                    <label><input type="radio" name="q4" value="C"> C) Car</label>
-                    <label><input type="radio" name="q4" value="D"> D) Rain</label>
-                </div>
-            </div>
-            <!-- Question 5 -->
-            <div class="question" data-answer="B" data-explanation="English makes finer distinctions between passive seeing, intentional looking, and sustained watching. Chinese tends to use 看 across these contexts, showing a broader semantic category.">
-                <h2>5. How do “see,” “look,” and “watch” reflect a more fine-grained semantic field than Chinese?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q5" value="A"> A) Chinese has completely different words for each verb.</label>
-                    <label><input type="radio" name="q5" value="B"> B) Chinese often uses one verb like 看 to cover all three meanings.</label>
-                    <label><input type="radio" name="q5" value="C"> C) Chinese does not distinguish actions involving eyes.</label>
-                    <label><input type="radio" name="q5" value="D"> D) The three English words are synonyms and interchangeable.</label>
-                </div>
-            </div>
-            <!-- Question 6 -->
-            <div class="question" data-answer="C" data-explanation="In Chinese, 面包 typically refers to Western-style baked bread, while 馒头 refers to steamed bread. English 'bread' can be broader, sometimes leading to mistranslation.">
-                <h2>6. Which illustrates how “bread” and its Chinese counterpart differ in semantic field?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q6" value="A"> A) English has no word for steamed buns.</label>
-                    <label><input type="radio" name="q6" value="B"> B) “Bread” in English includes both Western bread and Chinese mantou.</label>
-                    <label><input type="radio" name="q6" value="C"> C) The Chinese word 面包 usually excludes steamed bread like 馒头.</label>
-                    <label><input type="radio" name="q6" value="D"> D) The English word “bread” only refers to toast.</label>
-                </div>
-            </div>
-            <!-- Question 7 -->
-            <div class="question" data-answer="C" data-explanation="“干部” in Chinese is broad and context-dependent. 'Village leader' is a culturally adapted equivalent. 'Cadre' is a literal translation but lacks naturalness in English.">
-                <h2>7. Translate: “他在村里当干部。”</h2>
-                <div class="options">
-                    <label><input type="radio" name="q7" value="A"> A) He works as a civil servant in the village.</label>
-                    <label><input type="radio" name="q7" value="B"> B) He is a government official.</label>
-                    <label><input type="radio" name="q7" value="C"> C) He is a village leader.</label>
-                    <label><input type="radio" name="q7" value="D"> D) He is a cadre in the village.</label>
-                </div>
-            </div>
-            <!-- Question 8 -->
-            <div class="question" data-answer="B" data-explanation="Chinese 蓝色 includes light and dark blue, while English makes this distinction. This semantic field mismatch may lead to misinterpretation in visual contexts.">
-                <h2>8. Which illustrates a difference in semantic fields between English and Chinese color terms?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q8" value="A"> A) 红色 in Chinese includes both crimson and maroon.</label>
-                    <label><input type="radio" name="q8" value="B"> B) Chinese doesn’t distinguish between light blue and dark blue.</label>
-                    <label><input type="radio" name="q8" value="C"> C) Chinese has no word for green.</label>
-                    <label><input type="radio" name="q8" value="D"> D) English and Chinese treat color terms identically.</label>
-                </div>
-            </div>
-            <!-- Question 9 -->
-            <div class="question" data-answer="B" data-explanation="“修养” encompasses cultural sophistication, manners, and inner cultivation. 'Cultured' best captures this wider semantic scope.">
-                <h2>9. “她是个很有修养的人。” Which reflects the semantic field of “修养”?</h2>
-                <div class="options">
-                    <label><input type="radio" name="q9" value="A"> A) She is well-mannered.</label>
-                    <label><input type="radio" name="q9" value="B"> B) She is very cultured.</label>
-                    <label><input type="radio" name="q9" value="C"> C) She is well-educated.</label>
-                    <label><input type="radio" name="q9" value="D"> D) She is disciplined.</label>
-                </div>
-            </div>
-            <!-- Question 10 (Short Answer) -->
-            <div class="question" data-answer="“青” is a traditional Chinese color term covering blue, green, and blue-green shades. English separates these into distinct categories, so “青” lacks a precise one-word equivalent in English—illustrating semantic field mismatch." data-explanation="“青” is a traditional Chinese color term covering blue, green, and blue-green shades. English separates these into distinct categories, so “青” lacks a precise one-word equivalent in English—illustrating semantic field mismatch.">
-                <h2>10. Explain why “青” in Chinese can be difficult to translate into English.</h2>
-                <textarea name="q10" placeholder="Type your answer here..."></textarea>
-            </div>
+  <div class="quiz-container">
+    <h1>Semantic Fields in Translation Quiz</h1>
+
+    <div id="questions">
+      <div
+        class="question"
+        data-answer="D"
+        data-answer-text="All of the above"
+        data-explanation="English uses one general term, 'uncle', while Chinese distinguishes based on maternal or paternal side and seniority, showing a finer semantic field."
+      >
+        <h2>1. English word: Uncle<br />Choose the best translation depending on context:</h2>
+        <div class="options">
+          <label><input type="radio" name="q1" value="A" />A) 叔叔</label>
+          <label><input type="radio" name="q1" value="B" />B) 舅舅</label>
+          <label><input type="radio" name="q1" value="C" />C) 伯伯</label>
+          <label><input type="radio" name="q1" value="D" />D) All of the above</label>
         </div>
-        <div class="buttons">
-            <button id="prev" disabled>Previous</button>
-            <button id="next">Next</button>
-            <button id="restart" style="display: none;">Restart</button>
+      </div>
+
+      <div
+        class="question"
+        data-answer="B"
+        data-answer-text="English uses different terms like 'tea', 'herbal tea', 'infusion', and 'tisane'."
+        data-explanation="In English, only drinks made from Camellia sinensis are strictly 'tea', whereas Chinese '茶' includes herbal drinks like 菊花茶 or 枸杞茶. The mismatch in categorisation shows a semantic field difference."
+      >
+        <h2>2. The Chinese word “茶” refers to a wide range of beverages. Which illustrates challenges translating “茶” into English?</h2>
+        <div class="options">
+          <label><input type="radio" name="q2" value="A" />A) “茶” always means “green tea” in English.</label>
+          <label><input type="radio" name="q2" value="B" />B) English uses different terms like “tea,” “herbal tea,” “infusion,” and “tisane.”</label>
+          <label><input type="radio" name="q2" value="C" />C) English and Chinese treat all kinds of tea identically.</label>
+          <label><input type="radio" name="q2" value="D" />D) “茶” only refers to black tea in Chinese.</label>
         </div>
-        <div id="summary" class="summary" style="display: none;"></div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="English uses one term for all cousins, but Chinese differentiates by gender and lineage, for example 表姐 for an older female cousin on the maternal side and 堂弟 for a younger male cousin on the paternal side. This reflects a more detailed semantic field in Chinese."
+        data-answer-text="English uses one term for all cousins, but Chinese differentiates by gender and lineage."
+        data-explanation="English uses one term for all cousins, but Chinese differentiates by gender and lineage, for example 表姐 for an older female cousin on the maternal side and 堂弟 for a younger male cousin on the paternal side. This reflects a more detailed semantic field in Chinese."
+      >
+        <h2>3. Explain the non-equivalence: The English word “cousin” vs. Chinese equivalents.</h2>
+        <textarea name="q3" placeholder="Type your answer here..."></textarea>
+      </div>
+
+      <div
+        class="question"
+        data-answer="B"
+        data-answer-text="Rice"
+        data-explanation="Chinese distinguishes types and forms of rice: 米 for uncooked rice, 饭 for cooked rice, 稻 for the rice plant, and so on. English generally uses just 'rice', indicating a coarser semantic field."
+      >
+        <h2>4. Which English word belongs to a semantic field divided more finely in Chinese?</h2>
+        <div class="options">
+          <label><input type="radio" name="q4" value="A" />A) Snow</label>
+          <label><input type="radio" name="q4" value="B" />B) Rice</label>
+          <label><input type="radio" name="q4" value="C" />C) Car</label>
+          <label><input type="radio" name="q4" value="D" />D) Rain</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="B"
+        data-answer-text="Chinese often uses one verb like 看 to cover all three meanings."
+        data-explanation="English makes finer distinctions between passive seeing, intentional looking, and sustained watching. Chinese tends to use 看 across these contexts, showing a broader semantic category."
+      >
+        <h2>5. How do “see,” “look,” and “watch” reflect a more fine-grained semantic field than Chinese?</h2>
+        <div class="options">
+          <label><input type="radio" name="q5" value="A" />A) Chinese has completely different words for each verb.</label>
+          <label><input type="radio" name="q5" value="B" />B) Chinese often uses one verb like 看 to cover all three meanings.</label>
+          <label><input type="radio" name="q5" value="C" />C) Chinese does not distinguish actions involving eyes.</label>
+          <label><input type="radio" name="q5" value="D" />D) The three English words are synonyms and interchangeable.</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="C"
+        data-answer-text="The Chinese word 面包 usually excludes steamed bread like 馒头."
+        data-explanation="In Chinese, 面包 typically refers to Western-style baked bread, while 馒头 refers to steamed bread. English 'bread' can be broader, sometimes leading to mistranslation."
+      >
+        <h2>6. Which illustrates how “bread” and its Chinese counterpart differ in semantic field?</h2>
+        <div class="options">
+          <label><input type="radio" name="q6" value="A" />A) English has no word for steamed buns.</label>
+          <label><input type="radio" name="q6" value="B" />B) “Bread” in English includes both Western bread and Chinese mantou.</label>
+          <label><input type="radio" name="q6" value="C" />C) The Chinese word 面包 usually excludes steamed bread like 馒头.</label>
+          <label><input type="radio" name="q6" value="D" />D) The English word “bread” only refers to toast.</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="C"
+        data-answer-text="He is a village leader."
+        data-explanation="“干部” in Chinese is broad and context-dependent. 'Village leader' is a culturally adapted equivalent. 'Cadre' is a literal translation but lacks naturalness in English."
+      >
+        <h2>7. Translate: “他在村里当干部。”</h2>
+        <div class="options">
+          <label><input type="radio" name="q7" value="A" />A) He works as a civil servant in the village.</label>
+          <label><input type="radio" name="q7" value="B" />B) He is a government official.</label>
+          <label><input type="radio" name="q7" value="C" />C) He is a village leader.</label>
+          <label><input type="radio" name="q7" value="D" />D) He is a cadre in the village.</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="B"
+        data-answer-text="Chinese doesn’t distinguish between light blue and dark blue."
+        data-explanation="Chinese 蓝色 includes light and dark blue, while English may lexicalise these distinctions more explicitly in context. This semantic field mismatch may lead to misinterpretation in visual contexts."
+      >
+        <h2>8. Which illustrates a difference in semantic fields between English and Chinese colour terms?</h2>
+        <div class="options">
+          <label><input type="radio" name="q8" value="A" />A) 红色 in Chinese includes both crimson and maroon.</label>
+          <label><input type="radio" name="q8" value="B" />B) Chinese doesn’t distinguish between light blue and dark blue.</label>
+          <label><input type="radio" name="q8" value="C" />C) Chinese has no word for green.</label>
+          <label><input type="radio" name="q8" value="D" />D) English and Chinese treat colour terms identically.</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="B"
+        data-answer-text="She is very cultured."
+        data-explanation="“修养” encompasses cultural sophistication, manners, and inner cultivation. 'Cultured' best captures this wider semantic scope."
+      >
+        <h2>9. “她是个很有修养的人。” Which reflects the semantic field of “修养”?</h2>
+        <div class="options">
+          <label><input type="radio" name="q9" value="A" />A) She is well-mannered.</label>
+          <label><input type="radio" name="q9" value="B" />B) She is very cultured.</label>
+          <label><input type="radio" name="q9" value="C" />C) She is well-educated.</label>
+          <label><input type="radio" name="q9" value="D" />D) She is disciplined.</label>
+        </div>
+      </div>
+
+      <div
+        class="question"
+        data-answer="“青” is a traditional Chinese colour term covering blue, green, and blue-green shades. English separates these into distinct categories, so “青” lacks a precise one-word equivalent in English, illustrating semantic field mismatch."
+        data-answer-text="“青” covers blue, green, and blue-green shades, so it has no exact one-word English equivalent."
+        data-explanation="“青” is a traditional Chinese colour term covering blue, green, and blue-green shades. English separates these into distinct categories, so “青” lacks a precise one-word equivalent in English, illustrating semantic field mismatch."
+      >
+        <h2>10. Explain why “青” in Chinese can be difficult to translate into English.</h2>
+        <textarea name="q10" placeholder="Type your answer here..."></textarea>
+      </div>
     </div>
 
-    <script>
-        const questions = document.querySelectorAll('.question');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        const restartBtn = document.getElementById('restart');
-        const summaryDiv = document.getElementById('summary');
-        let currentQuestion = 0;
-        let answers = {};
+    <div class="buttons">
+      <button id="prev" disabled>Previous</button>
+      <button id="next">Next</button>
+      <button id="restart" style="display: none;">Restart</button>
+    </div>
 
-        function showQuestion(index) {
-            questions.forEach((q, i) => {
-                q.classList.toggle('active', i === index);
-            });
-            prevBtn.disabled = index === 0;
-            nextBtn.textContent = index === questions.length - 1 ? 'Submit' : 'Next';
-            document.body.style.backgroundColor = `hsl(${index * 36}, 70%, 90%)`; // Colorful background transition
+    <div id="summary" class="summary" style="display: none;"></div>
+  </div>
+
+  <script>
+    const questions = document.querySelectorAll(".question");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    const restartBtn = document.getElementById("restart");
+    const summaryDiv = document.getElementById("summary");
+    const questionsWrapper = document.getElementById("questions");
+    const quizContainer = document.querySelector(".quiz-container");
+
+    let currentQuestion = 0;
+    let answers = {};
+
+    function showQuestion(index) {
+      questions.forEach((q, i) => {
+        q.classList.toggle("active", i === index);
+      });
+
+      prevBtn.disabled = index === 0;
+      nextBtn.textContent = index === questions.length - 1 ? "Submit" : "Next";
+      document.body.style.backgroundColor = `hsl(${index * 36}, 70%, 90%)`;
+      quizContainer.scrollTop = 0;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function checkShortAnswer(userAnswer) {
+      const userLower = userAnswer.toLowerCase().trim();
+
+      const keywordGroups = [
+        ["one term", "single term", "one word"],
+        ["differentiate", "distinguish", "different"],
+        ["gender", "male", "female"],
+        ["lineage", "maternal", "paternal"],
+        ["semantic field", "category"]
+      ];
+
+      let matchedGroups = 0;
+
+      keywordGroups.forEach(group => {
+        if (group.some(keyword => userLower.includes(keyword))) {
+          matchedGroups++;
+        }
+      });
+
+      return matchedGroups >= 2 || userLower.length > 40;
+    }
+
+    function getSelectedOptionText(questionEl) {
+      const selected = questionEl.querySelector("input:checked");
+      if (!selected) return "Not answered";
+      return selected.parentElement.textContent.trim();
+    }
+
+    function saveCurrentAnswer() {
+      const currentQ = questions[currentQuestion];
+      const textArea = currentQ.querySelector("textarea");
+
+      if (textArea) {
+        answers[currentQuestion] = textArea.value.trim();
+      } else {
+        const selected = currentQ.querySelector("input:checked");
+        answers[currentQuestion] = selected ? selected.value : null;
+      }
+    }
+
+    function showSummary() {
+      let score = 0;
+      let summaryHTML = "<h3>Quiz Summary</h3>";
+
+      questions.forEach((q, i) => {
+        const isShortAnswer = q.querySelector("textarea");
+        const correctAnswer = q.dataset.answerText || q.dataset.answer;
+        const explanation = q.dataset.explanation;
+        let userAnswer = "Not answered";
+        let isCorrect = false;
+
+        if (isShortAnswer) {
+          userAnswer = answers[i] && answers[i].trim() !== "" ? answers[i] : "Not answered";
+          isCorrect = userAnswer !== "Not answered" && checkShortAnswer(userAnswer);
+        } else {
+          userAnswer = getSelectedOptionText(q);
+          isCorrect = answers[i] === q.dataset.answer;
         }
 
-        function checkShortAnswer(userAnswer, correctAnswer) {
-            const userLower = userAnswer.toLowerCase().trim();
-            const correctLower = correctAnswer.toLowerCase();
-            const keywords = correctLower.split(' ').filter(word => word.length > 3); // Use words longer than 3 letters as keywords
-            return keywords.some(keyword => userLower.includes(keyword));
+        if (isCorrect) score++;
+
+        summaryHTML += `
+          <div class="summary-item">
+            <p><strong>Question ${i + 1}</strong></p>
+            <p><strong>Your answer:</strong> ${escapeHTML(userAnswer)}
+              <span class="${isCorrect ? "correct" : "incorrect"}">
+                (${isCorrect ? "Correct" : "Incorrect"})
+              </span>
+            </p>
+            <p><strong>Correct answer:</strong> ${escapeHTML(correctAnswer)}</p>
+            <p><strong>Explanation:</strong> ${escapeHTML(explanation)}</p>
+          </div>
+        `;
+      });
+
+      summaryHTML += `<p class="score">Score: ${score} / ${questions.length}</p>`;
+
+      summaryDiv.innerHTML = summaryHTML;
+      summaryDiv.style.display = "block";
+      questionsWrapper.style.display = "none";
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      restartBtn.style.display = "inline-block";
+
+      quizContainer.scrollTop = 0;
+    }
+
+    prevBtn.addEventListener("click", () => {
+      saveCurrentAnswer();
+
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion(currentQuestion);
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      saveCurrentAnswer();
+
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion(currentQuestion);
+      } else {
+        showSummary();
+      }
+    });
+
+    restartBtn.addEventListener("click", () => {
+      currentQuestion = 0;
+      answers = {};
+
+      summaryDiv.style.display = "none";
+      summaryDiv.innerHTML = "";
+      questionsWrapper.style.display = "block";
+      prevBtn.style.display = "inline-block";
+      nextBtn.style.display = "inline-block";
+      restartBtn.style.display = "none";
+
+      questions.forEach(q => {
+        const textArea = q.querySelector("textarea");
+        if (textArea) {
+          textArea.value = "";
         }
 
-        function showSummary() {
-            let score = 0;
-            let summaryHTML = '<h3>Quiz Summary</h3>';
-            questions.forEach((q, i) => {
-                const isShortAnswer = q.querySelector('textarea');
-                let userAnswer, correctAnswer, isCorrect;
-
-                if (isShortAnswer) {
-                    userAnswer = answers[i] || 'Not answered';
-                    correctAnswer = q.dataset.answer;
-                    isCorrect = userAnswer !== 'Not answered' && checkShortAnswer(userAnswer, correctAnswer);
-                } else {
-                    userAnswer = answers[i] || 'Not answered';
-                    correctAnswer = q.dataset.answer;
-                    isCorrect = userAnswer === correctAnswer;
-                }
-
-                if (isCorrect) score++;
-                const explanation = q.dataset.explanation;
-                summaryHTML += `
-                    <p><strong>Question ${i + 1}:</strong></p>
-                    <p>Your Answer: ${userAnswer} <span class="${isCorrect ? 'correct' : 'incorrect'}">(${isCorrect ? 'Correct' : 'Incorrect'})</span></p>
-                    <p>Correct Answer: ${correctAnswer}</p>
-                    <p>Explanation: ${explanation}</p><hr>`;
-            });
-            summaryHTML += `<p><strong>Score: ${score} / ${questions.length}</strong></p>`;
-            summaryDiv.innerHTML = summaryHTML;
-            summaryDiv.style.display = 'block';
-            document.getElementById('questions').style.display = 'none';
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'none';
-            restartBtn.style.display = 'inline';
-        }
-
-        prevBtn.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion(currentQuestion);
-            }
+        q.querySelectorAll('input[type="radio"]').forEach(input => {
+          input.checked = false;
         });
+      });
 
-        nextBtn.addEventListener('click', () => {
-            const currentQ = questions[currentQuestion];
-            const isShortAnswer = currentQ.querySelector('textarea');
-            if (isShortAnswer) {
-                answers[currentQuestion] = currentQ.querySelector('textarea').value.trim();
-            } else {
-                const selected = currentQ.querySelector('input:checked');
-                answers[currentQuestion] = selected ? selected.value : null;
-            }
+      showQuestion(0);
+    });
 
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                showQuestion(currentQuestion);
-            } else {
-                showSummary();
-            }
-        });
-
-        restartBtn.addEventListener('click', () => {
-            currentQuestion = 0;
-            answers = {};
-            summaryDiv.style.display = 'none';
-            document.getElementById('questions').style.display = 'block';
-            prevBtn.style.display = 'inline';
-            nextBtn.style.display = 'inline';
-            restartBtn.style.display = 'none';
-            showQuestion(0);
-            questions.forEach(q => {
-                if (q.querySelector('textarea')) {
-                    q.querySelector('textarea').value = '';
-                } else {
-                    q.querySelectorAll('input').forEach(input => input.checked = false);
-                }
-            });
-        });
-
-        // Start the quiz
-        showQuestion(0);
-    </script>
+    showQuestion(0);
+  </script>
 </body>
 </html>
